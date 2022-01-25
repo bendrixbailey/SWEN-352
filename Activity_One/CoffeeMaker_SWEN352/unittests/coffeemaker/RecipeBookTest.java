@@ -1,23 +1,43 @@
 package coffeemaker;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class RecipeBookTest {
-	
-	@Before
-	public void setUp() throws Exception {
+class RecipeBookTest {
+
+	@BeforeEach
+	void setUp() throws Exception {
 	}
 
-	@After
-	public void tearDown() throws Exception {
+	@AfterEach
+	void tearDown() throws Exception {
 	}
 
 	@Test
-	public void test() {
+	void testRecipeBook() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	void testGetRecipes() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	void testAddRecipe() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	void testDeleteRecipe() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	void testEditRecipe() {
 		fail("Not yet implemented");
 	}
 
