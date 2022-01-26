@@ -17,7 +17,7 @@ public class Recipe {
      * Creates a default recipe for the coffee maker.
      */
     public Recipe() {
-    	this.name = "";
+    	this.name = null;
     	this.price = 0;
     	this.amtCoffee = 0;
     	this.amtMilk = 0;
