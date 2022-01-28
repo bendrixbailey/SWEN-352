@@ -12,10 +12,16 @@ import coffeemaker.exceptions.RecipeException;
 class InventoryTest {
 	
 	private Inventory inventory;
+	private Recipe testRecipe;
 
 	@BeforeEach
 	void setUp() throws Exception {
 		inventory = new Inventory();
+		testRecipe = new Recipe();
+		testRecipe.setAmtChocolate("5");
+		testRecipe.setAmtMilk("5");
+		testRecipe.setAmtSugar("5");
+		testRecipe.setAmtCoffee("5");
 	}
 
 	@AfterEach
@@ -61,12 +67,12 @@ class InventoryTest {
 	
 	@Test
 	void testAddChocolateNegativeNumber() {
-		assertThrows(RecipeException.class, () -> inventory.addChocolate("-1"), "Units of chocolate must be a positive integer");
+		assertThrows(InventoryException.class, () -> inventory.addChocolate("-1"), "Units of chocolate must be a positive integer");
 	}
 	
 	@Test
 	void testAddChocolateInvalidString() {
-		assertThrows(RecipeException.class, () -> inventory.addChocolate("test"), "Units of chocolate must be a positive integer");
+		assertThrows(InventoryException.class, () -> inventory.addChocolate("test"), "Units of chocolate must be a positive integer");
 	}
 	
 
@@ -104,12 +110,12 @@ class InventoryTest {
 	
 	@Test
 	void testAddCoffeeNegativeNumber() {
-		assertThrows(RecipeException.class, () -> inventory.addCoffee("-1"), "Units of coffee must be a positive integer");
+		assertThrows(InventoryException.class, () -> inventory.addCoffee("-1"), "Units of coffee must be a positive integer");
 	}
 	
 	@Test
 	void testAddCoffeeInvalidString() {
-		assertThrows(RecipeException.class, () -> inventory.addCoffee("test"), "Units of coffee must be a positive integer");
+		assertThrows(InventoryException.class, () -> inventory.addCoffee("test"), "Units of coffee must be a positive integer");
 	}
 
 	
@@ -147,44 +153,209 @@ class InventoryTest {
 	
 	@Test
 	void testAddMilkNegativeNumber() {
-		assertThrows(RecipeException.class, () -> inventory.addMilk("-1"), "Units of milk must be a positive integer");
+		assertThrows(InventoryException.class, () -> inventory.addMilk("-1"), "Units of milk must be a positive integer");
 	}
 	
 	@Test
 	void testAddMilkInvalidString() {
-		assertThrows(RecipeException.class, () -> inventory.addMilk("test"), "Units of milk must be a positive integer");
+		assertThrows(InventoryException.class, () -> inventory.addMilk("test"), "Units of milk must be a positive integer");
 	}
 
 	
 	//Sugar Tests
 	@Test
 	void testGetSugar() {
-		fail("Not yet implemented");
+		assertEquals(15, inventory.getSugar());
 	}
 
 	@Test
 	void testSetSugar() {
-		fail("Not yet implemented");
+		inventory.setSugar(17);
+		assertEquals(17, inventory.getSugar());
+		//reset sugar
+		inventory.setSugar(15);
+	}
+	
+	@Test
+	void testSetSugarNegative() {
+		inventory.setSugar(-5);
+		assertEquals(15, inventory.getSugar());
 	}
 
 	@Test
-	void testAddSugar() {
-		fail("Not yet implemented");
+	void testAddSugarWorking() {
+		try {
+			inventory.addSugar("5");
+			assertEquals(20, inventory.getSugar());
+		}catch(InventoryException e) {
+			fail("Exception Thrown");
+		}
+		//reset chocolate to 15
+		inventory.setSugar(15);
+	} 
+	
+	@Test
+	void testAddSugarNegativeNumber() {
+		assertThrows(InventoryException.class, () -> inventory.addSugar("-1"), "Units of sugar must be a positive integer");
+	}
+	
+	@Test
+	void testAddSugarInvalidString() {
+		assertThrows(InventoryException.class, () -> inventory.addSugar("test"), "Units of sugar must be a positive integer");
 	}
 
+	
+	//Ingredient testing
 	@Test
 	void testEnoughIngredients() {
-		fail("Not yet implemented");
+		assertEquals(true, inventory.enoughIngredients(testRecipe));
 	}
+	
+	@Test
+	void testNotEnoughIngredientsChocolate() {
+		inventory.setChocolate(3);
+		assertEquals(false, inventory.enoughIngredients(testRecipe));
+		inventory.setChocolate(15);
+	}
+	
+	@Test
+	void testNotEnoughIngredientsCoffee() {
+		inventory.setCoffee(3);
+		assertEquals(false, inventory.enoughIngredients(testRecipe));
+		inventory.setCoffee(15);
+	}
+	
+	@Test
+	void testNotEnoughIngredientsMilk() {
+		inventory.setMilk(3);
+		assertEquals(false, inventory.enoughIngredients(testRecipe));
+		inventory.setMilk(15);
+	}
+	
+	@Test
+	void testNotEnoughIngredientsSugar() {
+		inventory.setSugar(3);
+		assertEquals(false, inventory.enoughIngredients(testRecipe));
+		inventory.setSugar(15);
+	}
+	
+	@Test
+	void testNotEnoughIngredientsAll() {
+		inventory.setChocolate(3);
+		inventory.setCoffee(3);
+		inventory.setMilk(3);
+		inventory.setSugar(3);
+		assertEquals(false, inventory.enoughIngredients(testRecipe));
+		inventory.setChocolate(15);
+		inventory.setCoffee(15);
+		inventory.setMilk(15);
+		inventory.setSugar(15);
+	}
+	
+	
+	
+	//ingredient use testing
 
 	@Test
-	void testUseIngredients() {
-		fail("Not yet implemented");
+	void testUseIngredientsEnough() {
+		assertEquals(true, inventory.useIngredients(testRecipe));
+		assertEquals(10, inventory.getChocolate());
+		assertEquals(10, inventory.getCoffee());
+		assertEquals(10, inventory.getMilk());
+		assertEquals(10, inventory.getSugar()); 
 	}
+	
+	@Test
+	void testUseIngredientsNotEnoughCoffee() {
+		inventory.setCoffee(3);
+		inventory.setChocolate(15);
+		inventory.setMilk(15);
+		inventory.setSugar(15);
+		assertEquals(false, inventory.useIngredients(testRecipe));
+		assertEquals(15, inventory.getChocolate());	//make sure amounts havent changed if recipe isnt used
+		assertEquals(3, inventory.getCoffee());
+		assertEquals(15, inventory.getMilk());
+		assertEquals(15, inventory.getSugar());
+		inventory.setCoffee(15);
+	}
+	
+	@Test
+	void testUseIngredientsNotEnoughChocolate() {
+		inventory.setChocolate(3);
+		inventory.setCoffee(15);
+		inventory.setMilk(15);
+		inventory.setSugar(15);
+		assertEquals(false, inventory.useIngredients(testRecipe));
+		assertEquals(3, inventory.getChocolate());	//make sure amounts havent changed if recipe isnt used
+		assertEquals(15, inventory.getCoffee());
+		assertEquals(15, inventory.getMilk());
+		assertEquals(15, inventory.getSugar());
+		inventory.setChocolate(15);
+	}
+	
+	@Test
+	void testUseIngredientsNotEnoughMilk() {
+		inventory.setChocolate(15);
+		inventory.setCoffee(15);
+		inventory.setMilk(3);
+		inventory.setSugar(15);
+		assertEquals(false, inventory.useIngredients(testRecipe));
+		assertEquals(15, inventory.getChocolate());	//make sure amounts havent changed if recipe isnt used
+		assertEquals(15, inventory.getCoffee());
+		assertEquals(3, inventory.getMilk());
+		assertEquals(15, inventory.getSugar());
+		inventory.setMilk(15);
+	}
+	
+	@Test
+	void testUseIngredientsNotEnoughSugar() {
+		inventory.setChocolate(15);
+		inventory.setCoffee(15);
+		inventory.setMilk(15);
+		inventory.setSugar(3);
+		assertEquals(false, inventory.useIngredients(testRecipe));
+		assertEquals(15, inventory.getChocolate());	//make sure amounts havent changed if recipe isnt used
+		assertEquals(15, inventory.getCoffee());
+		assertEquals(15, inventory.getMilk());
+		assertEquals(3, inventory.getSugar());
+		inventory.setSugar(15);
+	}
+	
+	@Test
+	void testUseIngredientsNotEnoughAnything() {
+		inventory.setChocolate(3);
+		inventory.setCoffee(3);
+		inventory.setMilk(3);
+		inventory.setSugar(3);
+		assertEquals(false, inventory.useIngredients(testRecipe));
+		assertEquals(3, inventory.getChocolate());
+		assertEquals(3, inventory.getCoffee());
+		assertEquals(3, inventory.getMilk());
+		assertEquals(3, inventory.getSugar());
+		//reset back to normal amt of ingredients
+		inventory.setChocolate(15);
+		inventory.setCoffee(15);
+		inventory.setMilk(15);
+		inventory.setSugar(15);
+	}
+	
 
 	@Test
 	void testToString() {
-		fail("Not yet implemented");
+		StringBuffer testBuf = new StringBuffer();
+		testBuf.append("Coffee: ");
+		testBuf.append(15);
+		testBuf.append("\n");
+		testBuf.append("Milk: ");
+		testBuf.append(15);
+		testBuf.append("\n");
+		testBuf.append("Sugar: ");
+		testBuf.append(15);
+		testBuf.append("\n");
+		testBuf.append("Chocolate: ");
+		testBuf.append(15);
+		testBuf.append("\n");
+		assertEquals(testBuf.toString(), inventory.toString());
 	}
 
 }
