@@ -171,7 +171,7 @@ public class Inventory {
      * to the current amount of sugar units.
      * @param sugar
      * @throws InventoryException
-     */
+     */ 
     public synchronized void addSugar(String sugar) throws InventoryException {
     	int amtSugar = 0;
     	try {
@@ -179,7 +179,7 @@ public class Inventory {
     	} catch (NumberFormatException e) {
     		throw new InventoryException("Units of sugar must be a positive integer");
     	}
-		if (amtSugar <= 0) {
+		if (amtSugar >= 0) {			//Fixed
 			Inventory.sugar += amtSugar;
 		} else {
 			throw new InventoryException("Units of sugar must be a positive integer");
@@ -217,11 +217,11 @@ public class Inventory {
      */
     public synchronized boolean useIngredients(Recipe r) {
     	if (enoughIngredients(r)) {
-	    	Inventory.coffee += r.getAmtCoffee();
+	    	Inventory.coffee -= r.getAmtCoffee();	//Defect Fixed
 	    	Inventory.milk -= r.getAmtMilk();
 	    	Inventory.sugar -= r.getAmtSugar();
 	    	Inventory.chocolate -= r.getAmtChocolate();
-	    	return true;
+	    	return true; 
     	} else {
     		return false;
     	}
@@ -246,6 +246,6 @@ public class Inventory {
     	buf.append("Chocolate: ");
     	buf.append(getChocolate());
     	buf.append("\n");
-    	return buf.toString();
+    	return buf.toString(); 
     }
 }
