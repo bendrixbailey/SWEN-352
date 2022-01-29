@@ -59,7 +59,7 @@ public class Inventory {
     	} catch (NumberFormatException e) {
     		throw new InventoryException("Units of chocolate must be a positive integer");
     	}
-		if (amtChocolate >= 0) {
+		if (amtChocolate >= 0) { 
 			Inventory.chocolate += amtChocolate;
 		} else {
 			throw new InventoryException("Units of chocolate must be a positive integer");
@@ -173,7 +173,7 @@ public class Inventory {
      * @throws InventoryException
      */ 
     public synchronized void addSugar(String sugar) throws InventoryException {
-    	int amtSugar = 0;
+    	int amtSugar = 0; 
     	try {
     		amtSugar = Integer.parseInt(sugar);
     	} catch (NumberFormatException e) {

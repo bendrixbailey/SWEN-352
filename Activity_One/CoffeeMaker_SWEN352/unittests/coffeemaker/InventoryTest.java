@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import coffeemaker.exceptions.InventoryException;
-import coffeemaker.exceptions.RecipeException;
 
 class InventoryTest {
 	
@@ -29,7 +28,7 @@ class InventoryTest {
 	}
 
 	@Test
-	void testInventory() {
+	void testInventory() { 
 		assertNotEquals(null, inventory);
 	}
 
@@ -52,6 +51,13 @@ class InventoryTest {
 		inventory.setChocolate(-5);
 		assertEquals(15, inventory.getChocolate());
 	}
+	
+	@Test
+	void testSetChocolateZero() {
+		inventory.setChocolate(0);
+		assertEquals(0, inventory.getChocolate());
+		inventory.setChocolate(15);
+	}
 
 	@Test
 	void testAddChocolateWorking() {
@@ -66,8 +72,23 @@ class InventoryTest {
 	}
 	
 	@Test
+	void testAddChocolateZero() {
+		try {
+			inventory.addChocolate("0");
+			assertEquals(15, inventory.getChocolate());
+		}catch(InventoryException e) {
+			fail("Exception Thrown");
+		}
+	}
+	
+	@Test
 	void testAddChocolateNegativeNumber() {
 		assertThrows(InventoryException.class, () -> inventory.addChocolate("-1"), "Units of chocolate must be a positive integer");
+	}
+	
+	@Test
+	void testAddChocolateNull() {
+		assertThrows(InventoryException.class, () -> inventory.addChocolate(null), "Units of chocolate must be a positive integer");
 	}
 	
 	@Test
@@ -95,6 +116,13 @@ class InventoryTest {
 		inventory.setCoffee(-5);
 		assertEquals(15, inventory.getCoffee());
 	}
+	
+	@Test
+	void testSetCoffeeZero() {
+		inventory.setCoffee(0);
+		assertEquals(0, inventory.getCoffee());
+		inventory.setCoffee(15);
+	}
 
 	@Test
 	void testAddCoffeeWorking() {
@@ -109,8 +137,23 @@ class InventoryTest {
 	}
 	
 	@Test
+	void testAddCoffeeZero() {
+		try {
+			inventory.addCoffee("0");
+			assertEquals(15, inventory.getCoffee());
+		}catch(InventoryException e) {
+			fail("Exception Thrown");
+		}
+	}
+	
+	@Test
 	void testAddCoffeeNegativeNumber() {
 		assertThrows(InventoryException.class, () -> inventory.addCoffee("-1"), "Units of coffee must be a positive integer");
+	}
+	
+	@Test
+	void testAddCoffeeNull() {
+		assertThrows(InventoryException.class, () -> inventory.addCoffee(null), "Units of coffee must be a positive integer");
 	}
 	
 	@Test
@@ -138,6 +181,13 @@ class InventoryTest {
 		inventory.setMilk(-5);
 		assertEquals(15, inventory.getMilk());
 	}
+	
+	@Test
+	void testSetMilkZero() {
+		inventory.setMilk(0);
+		assertEquals(0, inventory.getMilk());
+		inventory.setMilk(15);
+	}
 
 	@Test
 	void testAddMilkWorking() {
@@ -152,8 +202,23 @@ class InventoryTest {
 	}
 	
 	@Test
+	void testAddMilkZero() {
+		try {
+			inventory.addMilk("0");
+			assertEquals(15, inventory.getMilk());
+		}catch(InventoryException e) {
+			fail("Exception Thrown");
+		}
+	}
+	
+	@Test
 	void testAddMilkNegativeNumber() {
 		assertThrows(InventoryException.class, () -> inventory.addMilk("-1"), "Units of milk must be a positive integer");
+	}
+	
+	@Test
+	void testAddMilkNull() {
+		assertThrows(InventoryException.class, () -> inventory.addMilk(null), "Units of milk must be a positive integer");
 	}
 	
 	@Test
@@ -176,10 +241,18 @@ class InventoryTest {
 		inventory.setSugar(15);
 	}
 	
+	
 	@Test
 	void testSetSugarNegative() {
 		inventory.setSugar(-5);
 		assertEquals(15, inventory.getSugar());
+	}
+	
+	@Test
+	void testSetSugarZero() {
+		inventory.setSugar(0);
+		assertEquals(0, inventory.getSugar());
+		inventory.setSugar(15);
 	}
 
 	@Test
@@ -191,12 +264,27 @@ class InventoryTest {
 			fail("Exception Thrown");
 		}
 		//reset chocolate to 15
-		inventory.setSugar(15);
+		inventory.setSugar(15); 
 	} 
+	
+	@Test
+	void testAddSugarZero() {
+		try {
+			inventory.addSugar("0");
+			assertEquals(15, inventory.getSugar());
+		}catch(InventoryException e) {
+			fail("Exception Thrown");
+		}
+	}
 	
 	@Test
 	void testAddSugarNegativeNumber() {
 		assertThrows(InventoryException.class, () -> inventory.addSugar("-1"), "Units of sugar must be a positive integer");
+	}
+	
+	@Test
+	void testAddSugarNull() {
+		assertThrows(InventoryException.class, () -> inventory.addSugar(null), "Units of sugar must be a positive integer");
 	}
 	
 	@Test
@@ -250,6 +338,12 @@ class InventoryTest {
 		inventory.setCoffee(15);
 		inventory.setMilk(15);
 		inventory.setSugar(15);
+	}
+	
+	@Test
+	void testEnoughIngredientsEmptyRecipe() {
+		Recipe testRecipe = new Recipe();
+		assertEquals(true, inventory.enoughIngredients(testRecipe));
 	}
 	
 	
