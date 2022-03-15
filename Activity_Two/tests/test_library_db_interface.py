@@ -9,7 +9,7 @@ class TestLibraryDBInterface(unittest.TestCase):
         self.db_interface = library_db_interface.Library_DB()
 
     def test_get_patron_empty(self):
-        self.assertEqual(self.db_interface.get_patron_count(), 1)  
+        self.assertEqual(self.db_interface.get_patron_count(), 3)  
 
     def test_insert_patron_not_in_db(self):
         mock_patron = Mock()
@@ -19,6 +19,7 @@ class TestLibraryDBInterface(unittest.TestCase):
         self.db_interface.convert_patron_to_db_format = Mock(return_value=data)
         self.db_interface.db.insert = Mock(return_value=5)
         self.assertEqual(self.db_interface.insert_patron(mock_patron), 5)
+        self.db_interface.db.insert.assert_called_once_with(data)
 
     
     def test_insert_patron_in_db(self):
@@ -44,7 +45,7 @@ class TestLibraryDBInterface(unittest.TestCase):
         patron_mock.get_memberID = Mock(return_value=2)
         patron_mock.get_borrowed_books = Mock(return_value=5)
         self.db_interface.insert_patron(patron_mock)
-        self.assertEqual(self.db_interface.get_patron_count(), 1)
+        self.assertEqual(self.db_interface.get_patron_count(), 3)
 
     def test_get_all_patrons(self):
         patron_mock = Mock()
