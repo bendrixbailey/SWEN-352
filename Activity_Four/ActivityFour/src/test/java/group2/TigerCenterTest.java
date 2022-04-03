@@ -19,7 +19,8 @@ public class TigerCenterTest {
 
     @BeforeClass
     public static void setUp() throws Exception {
-		System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver"); // can be replaced with Firefox driver
+		//System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver"); // can be replaced with Firefox driver
+		System.setProperty("webdriver.chrome.driver", "C:\\Users\\Aidan\\chromedriver_win32\\chromedriver.exe");
 		driver = new ChromeDriver(); // can be replaced with Firefox
 		baseUrl = "https://"; // TARGET URL
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
@@ -182,5 +183,4 @@ public class TigerCenterTest {
 			driver.wait(3000);
 		}
     } 
-
 }
